@@ -13,6 +13,7 @@ class ContactController extends Controller
     {
         $email = $requester['email'] ?? null;
         $phone = $requester['phone'] ?? null;
+        $mobile = $requester['mobile'] ?? null;
         $old_id = $requester['id'] ?? null;
 
         // Check cache first
@@ -39,6 +40,10 @@ class ContactController extends Controller
         // If not found by email, search by phone
         if (!$contact && $phone) {
             $contact = $this->searchZohoContact('phone', $phone);
+        }
+
+        if (!$contact && $mobile) {
+            $contact = $this->searchZohoContact('phone', $mobile);
         }
 
         // If found, store and return
@@ -76,7 +81,7 @@ class ContactController extends Controller
         $zoho = new ZohoApiService();
         $nameParts = explode(' ', $requester['name'] ?? 'No Name');
         $firstName = $nameParts[0] ?? '';
-        $lastName = $nameParts[1] ?? '';
+        $lastName = $nameParts[1] ?? $requester['email'] ?? $firstName;
 
         $payload = [
             'firstName' => $firstName,
@@ -87,7 +92,7 @@ class ContactController extends Controller
             'mobile' => $requester['mobile'] ?? null,
         ];
 
-        $response = $zoho->makeRequest('post', 'contacts', $payload);
+        $response = $zoho->makeRequest('post', 'contacts', $payload, 'contacts');
 
         return $response ?? null;
     }

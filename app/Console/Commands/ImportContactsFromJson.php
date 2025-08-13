@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\TicketController;
+use App\Jobs\ProcessZohoContact;
 use App\Models\Article;
 use App\Models\CategoryMapping;
 use App\Services\ZohoApiService;
@@ -42,7 +43,7 @@ class ImportContactsFromJson extends Command
             $requester  = $ticketItem['helpdesk_ticket']['requester'];
 
             if ($requester) {
-                $contactController->handleContact($requester);
+                ProcessZohoContact::dispatch($requester);
             }
         }
 

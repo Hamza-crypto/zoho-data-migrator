@@ -29,7 +29,6 @@ class ZohoApiService
         ]);
 
         if (!empty($data)) {
-            dd($data);
             $response = $request->$method($url, $data);
         } else {
             $response = $request->$method($url);
@@ -48,7 +47,7 @@ class ZohoApiService
             'internal_id' => $internalId,
             'zoho_record_id' => $zohoId,
             'payload' => $data,
-            'response' => $responseBody,
+            'response' => $responseBody ?? $url,
             'success' => $success,
         ]);
 

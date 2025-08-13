@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\TicketController;
+use App\Jobs\ProcessZohoContact;
+use App\Jobs\ProcessZohoTicket;
 use App\Models\Article;
 use App\Models\CategoryMapping;
 use App\Services\ZohoApiService;
@@ -35,20 +37,9 @@ class ImportTicketsFromJson extends Command
 
         $importedCount = 0;
 
-        $zohoService = new ZohoApiService();
-        $ticketController = new TicketController();
-
         foreach ($jsonData as $ticketItem) {
             $ticket = $ticketItem['helpdesk_ticket'];
-
-            $title = $ticket['subject'] . 'dasdasdas';
-
-            dump($title);
-            $result = $ticketController->searchTicketByTitle($title, $ticket['id']);
-            dd($result);
-
-            continue;
-
+            ProcessZohoTicket::dispatch($ticket);
         }
 
         $this->info("✅ Imported $importedCount articles successfully.");
