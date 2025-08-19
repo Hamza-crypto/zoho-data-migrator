@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->nullable()->index();
-            $table->string('phone')->nullable()->index();
-            $table->string('zoho_contact_id');
-            $table->string('old_contact_id');
+            $table->string('zoho_id')->nullable();
+            $table->string('account_id')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('mobile')->nullable();
+            $table->string('account_name')->nullable();
+            $table->boolean('is_new')->default(0);
             $table->timestamps();
         });
     }

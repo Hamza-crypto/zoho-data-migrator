@@ -11,17 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('fresh_accounts', function (Blueprint $table) {
             $table->id();
-            $table->string('zoho_id')->nullable();
-            $table->string('zoho_parent_id')->nullable();
-            $table->string('fresh_crm_id')->nullable();
-            $table->string('fresh_crm_parent_id')->nullable();
+            $table->string('fresh_id')->nullable()->unique();
+            $table->string('parent_id')->nullable();
+            $table->string('parent_name')->nullable();
             $table->string('name')->index();
             $table->string('phone')->nullable();
             $table->string('website')->nullable();
             $table->string('zipcode')->nullable();
-            $table->boolean('is_new')->default(0);
+
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('fresh_accounts');
     }
 };

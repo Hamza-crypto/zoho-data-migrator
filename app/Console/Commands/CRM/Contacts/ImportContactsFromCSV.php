@@ -1,26 +1,20 @@
 <?php
 
-namespace App\Console\Commands\CRM\Accounts;
+namespace App\Console\Commands\CRM\Contacts;
 
-use App\Http\Controllers\TicketController;
-use App\Jobs\ProcessZohoContact;
-use App\Jobs\ProcessZohoTicket;
-use App\Models\Article;
-use App\Models\CategoryMapping;
-use App\Services\ZohoApiService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
 
-class ImportAccountsFromCSV extends Command
+class ImportContactsFromCSV extends Command
 {
-    protected $signature = 'import:accounts {filePath}';
-    protected $description = 'Import all accounts from a JSON file and log them in the accounts table';
+    protected $signature = 'import:contacts2 {filePath}';
+    protected $description = 'Import all contacts from a JSON file and log them in the contacts table';
 
     public function handle()
     {
+        DB::table('contacts')->truncate();
+
         $filePath = $this->argument('filePath');
 
         if (!File::exists($filePath)) {
@@ -36,33 +30,32 @@ class ImportAccountsFromCSV extends Command
 
         $header = fgetcsv($handle); // Read header row
         $batch = [];
-        $chunkSize = 1000;
+        $chunkSize = 5000;
         $totalInserted = 0;
 
         while (($row = fgetcsv($handle)) !== false) {
             $rowData = array_combine($header, $row);
 
-            if(empty($rowData['Account Name'])) continue;
-
             $batch[] = [
                 'zoho_id'       => $rowData['Record Id'] ?? null,
-                'zoho_parent_id'      => $rowData['Parent Account.id'] ?? null,
-                'fresh_crm_id'       => $rowData['Fresh CRM ID'] ?? null,
-                'name'       => $rowData['Account Name'] ?? null,
-                'phone'      => $rowData['Phone'] ?? null,
-                'website'       => $rowData['Website'] ?? null,
-                'zipcode'       => $rowData['Billing Code'] ?? null,
+                'first_name'      => $rowData['First Name'] ?? null,
+                'last_name'      => $rowData['Last Name'] ?? null,
+                'email'       => $rowData['Email'] ?? null,
+                'account_id'       => $rowData['Account Name.id'] ?? null,
+                'account_name'       => $rowData['Account Name'] ?? null,
+                'phone'       => $rowData['Phone'] ?? null,
+                'mobile'       => $rowData['Mobile'] ?? null,
             ];
 
             if (count($batch) >= $chunkSize) {
-                DB::table('accounts')->insert($batch);
+                DB::table('contacts')->insert($batch);
                 $totalInserted += count($batch);
                 $batch = [];
             }
         }
 
         if (!empty($batch)) {
-            DB::table('accounts')->insert($batch);
+            DB::table('contacts')->insert($batch);
             $totalInserted += count($batch);
         }
 
