@@ -52,8 +52,15 @@ class ImportAccountsFromCSV extends Command
                 'fresh_crm_id'       => trim($rowData['Fresh CRM ID']) !== '' ? trim($rowData['Fresh CRM ID']) : null,
                 'name'       => $rowData['Account Name'] ?? null,
                 'phone'      => $rowData['Phone'] ?? null,
+                'type'      => $rowData['Account Type'] ?? null,
                 'website'       => $rowData['Website'] ?? null,
-                'zipcode'       => $rowData['Billing Code'] ?? null,
+                'street'       => $rowData['Billing Street'] ?? null,
+                'city'       => $rowData['Billing City'] ?? null,
+                'state'       => $rowData['Billing State'] ?? null,
+                'zip'       => $rowData['Billing Code'] ?? null,
+                'country'       => $rowData['Billing Country'] ?? null,
+                'starting_grade' => !empty($rowData['Starting Grade']) ? (int)$rowData['Starting Grade'] : 0,
+                'ending_grade'   => !empty($rowData['Ending Grade'])   ? (int)$rowData['Ending Grade']   : 0,
             ];
 
             if (count($batch) >= $chunkSize) {

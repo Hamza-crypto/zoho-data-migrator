@@ -20,8 +20,15 @@ return new class extends Migration
             $table->string('name')->index();
             $table->string('phone')->nullable();
             $table->string('website')->nullable();
-            $table->string('zipcode')->nullable();
+            $table->string('type')->nullable();
             $table->boolean('is_new')->default(0);
+            $table->string('street')->default(0);
+            $table->string('city')->default(0);
+            $table->string('state')->default(0);
+            $table->string('zip')->default(0);
+            $table->string('country')->default(0);
+            $table->integer('starting_grade')->default(0);
+            $table->integer('ending_grade')->default(0);
             $table->timestamps();
         });
     }

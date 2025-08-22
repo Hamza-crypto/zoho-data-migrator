@@ -30,7 +30,7 @@ class ImportContactsFromCSV extends Command
 
         $header = fgetcsv($handle); // Read header row
         $batch = [];
-        $chunkSize = 5000;
+        $chunkSize = 1000;
         $totalInserted = 0;
 
         while (($row = fgetcsv($handle)) !== false) {
@@ -46,6 +46,11 @@ class ImportContactsFromCSV extends Command
                 'phone'       => $rowData['Phone'] ?? null,
                 'mobile'       => $rowData['Mobile'] ?? null,
                 'title'       => $rowData['Title'] ?? null,
+                'street'       => $rowData['Mailing Street'] ?? null,
+                'city'       => $rowData['Mailing City'] ?? null,
+                'state'       => $rowData['Mailing State'] ?? null,
+                'zip'       => $rowData['Mailing Zip'] ?? null,
+                'country'       => $rowData['Mailing Country'] ?? null,
             ];
 
             if (count($batch) >= $chunkSize) {

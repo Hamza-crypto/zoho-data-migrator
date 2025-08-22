@@ -23,6 +23,11 @@ return new class extends Migration
             $table->string('account_name')->nullable();
             $table->string('title')->nullable();
             $table->boolean('is_new')->default(0);
+            $table->string('street')->default(0);
+            $table->string('city')->default(0);
+            $table->string('state')->default(0);
+            $table->string('zip')->default(0);
+            $table->string('country')->default(0);
             $table->timestamps();
         });
     }
