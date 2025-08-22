@@ -45,6 +45,7 @@ class ImportContactsFromCSV extends Command
                 'account_name'       => $rowData['Account Name'] ?? null,
                 'phone'       => $rowData['Phone'] ?? null,
                 'mobile'       => $rowData['Mobile'] ?? null,
+                'title'       => $rowData['Title'] ?? null,
             ];
 
             if (count($batch) >= $chunkSize) {

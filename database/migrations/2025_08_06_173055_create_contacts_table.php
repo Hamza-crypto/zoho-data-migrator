@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('mobile')->nullable();
             $table->string('account_name')->nullable();
+            $table->string('title')->nullable();
             $table->boolean('is_new')->default(0);
             $table->timestamps();
         });

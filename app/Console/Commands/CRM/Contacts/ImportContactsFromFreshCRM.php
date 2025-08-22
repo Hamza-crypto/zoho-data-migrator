@@ -93,7 +93,6 @@ class ImportContactsFromFreshCRM extends Command
             $rowData = array_combine($header, $row);
 
             //if(empty($rowData['Email'])) continue;
-
             //if($rowData['Id'] != '28148387097') continue;
 
             $email = !empty($rowData['Email']) ? strtolower(trim($rowData['Email'])) : null;
@@ -177,9 +176,9 @@ class ImportContactsFromFreshCRM extends Command
 
         // Update old records
         if (!empty($updateRecordsByEmail)) {
-            DB::table('contacts')
-                ->whereIn('email', $updateRecordsByEmail)
-                ->update([ 'updated_at' => now()]);
+//            DB::table('contacts')
+//                ->whereIn('email', $updateRecordsByEmail)
+//                ->update([ 'updated_at' => now()]);
         }
 
         if (!empty($updateRecordsByName)) {
@@ -188,21 +187,21 @@ class ImportContactsFromFreshCRM extends Command
                 $first = $parts[0] ?? '';
                 $last  = $parts[1] ?? '';
 
-                DB::table('contacts')
-                    ->whereRaw('LOWER(TRIM(first_name)) = ? AND LOWER(TRIM(last_name)) = ?', [$first, $last])
-                    ->update(['updated_at' => now()]);
+//                DB::table('contacts')
+//                    ->whereRaw('LOWER(TRIM(first_name)) = ? AND LOWER(TRIM(last_name)) = ?', [$first, $last])
+//                    ->update(['updated_at' => now()]);
             }
         }
 
         if (!empty($updateRecordsByAccount)) {
-            DB::table('contacts')
-                ->whereIn('account_name', $updateRecordsByAccount)
-                ->update([ 'updated_at' => now()]);
+//            DB::table('contacts')
+//                ->whereIn('account_name', $updateRecordsByAccount)
+//                ->update([ 'updated_at' => now()]);
         }
 
         // Insert new records
         if (!empty($newRecords)) {
-            DB::table('contacts')->insert($newRecords);
+//            DB::table('contacts')->insert($newRecords);
         }
 
         $this->info("✅ Inserted " . count($newRecords) . " new contacts.");
@@ -289,7 +288,6 @@ class ImportContactsFromFreshCRM extends Command
                 ->whereRaw('LOWER(TRIM(name)) = ?', [$name])
                 ->whereRaw('REPLACE(phone, " ", "") = ?', [$phone])
                 ->pluck('zoho_id');
-
             if ($matches->count() === 1) {
                 return $matches->first();
             }
@@ -298,11 +296,10 @@ class ImportContactsFromFreshCRM extends Command
         // Rule 4: Match by account name + website
         if ($website) {
             $matches = DB::table('accounts')
-                ->whereRaw('LOWER(TRIM(name)) = ?', [$name])
                 ->whereRaw('LOWER(TRIM(REPLACE(REPLACE(REPLACE(website, "http://", ""), "https://", ""), "www.", ""))) = ?', [$website])
                 ->pluck('zoho_id');
 
-            if ($matches->count() === 1) {
+            if ($matches->count() === 2) {
                 return $matches->first();
             }
         }

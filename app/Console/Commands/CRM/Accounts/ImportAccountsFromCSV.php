@@ -21,6 +21,8 @@ class ImportAccountsFromCSV extends Command
 
     public function handle()
     {
+        DB::table('accounts')->truncate();
+
         $filePath = $this->argument('filePath');
 
         if (!File::exists($filePath)) {
@@ -47,7 +49,7 @@ class ImportAccountsFromCSV extends Command
             $batch[] = [
                 'zoho_id'       => $rowData['Record Id'] ?? null,
                 'zoho_parent_id'      => $rowData['Parent Account.id'] ?? null,
-                'fresh_crm_id'       => $rowData['Fresh CRM ID'] ?? null,
+                'fresh_crm_id'       => trim($rowData['Fresh CRM ID']) !== '' ? trim($rowData['Fresh CRM ID']) : null,
                 'name'       => $rowData['Account Name'] ?? null,
                 'phone'      => $rowData['Phone'] ?? null,
                 'website'       => $rowData['Website'] ?? null,
